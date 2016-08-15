@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<pre class="metadata">
+title: Singleline flag for regular expressions
+status: proposal
+stage: 0
+location: https://mathiasbynens.github.io/es-regexp-singleline-flag/
+copyright: false
+contributors: Mathias Bynens
+</pre>
+<script src="ecmarkup.js" defer></script>
+<link rel="stylesheet" href="ecmarkup.css">
+<style>
+  hr {
+    height: 0.25em;
+    background: #ccc;
+    border: 0;
+    margin: 2em 0;
+  }
+</style>
+
+<p>The algorithm listed in <a href="https://tc39.github.io/ecma262/#sec-regexpinitialize" title="Runtime Semantics: RegExpInitialize ( obj, pattern, flags )">21.2.3.2.2</a> is modified as follows.</p>
+
+<emu-clause id="sec-regexpinitialize" aoid="RegExpInitialize">
+  <h1>Runtime Semantics: RegExpInitialize ( _obj_, _pattern_, _flags_ )</h1>
+  <p>When the abstract operation RegExpInitialize with arguments _obj_, _pattern_, and _flags_ is called, the following steps are taken:</p>
+  <emu-alg>
+    1. If _pattern_ is *undefined*, let _P_ be the empty String.
+    1. Else, let _P_ be ? ToString(_pattern_).
+    1. If _flags_ is *undefined*, let _F_ be the empty String.
+    1. Else, let _F_ be ? ToString(_flags_).
+    1. If _F_ contains any code unit other than `"g"`, `"i"`, `"m"`, <ins>`"s"`, </ins>`"u"`, or `"y"` or if it contains the same code unit more than once, throw a *SyntaxError* exception.
+    1. If _F_ contains `"u"`, let _BMP_ be *false*; else let _BMP_ be *true*.
+    1. If _BMP_ is *true*, then
+      1. Parse _P_ using the grammars in <emu-xref href="#sec-patterns"></emu-xref> and interpreting each of its 16-bit elements as a Unicode BMP code point. UTF-16 decoding is not applied to the elements. The goal symbol for the parse is |Pattern[~U]|. Throw a *SyntaxError* exception if _P_ did not conform to the grammar, if any elements of _P_ were not matched by the parse, or if any Early Error conditions exist.
+      1. Let _patternCharacters_ be a List whose elements are the code unit elements of _P_.
+    1. Else,
+      1. Parse _P_ using the grammars in <emu-xref href="#sec-patterns"></emu-xref> and interpreting _P_ as UTF-16 encoded Unicode code points (<emu-xref href="#sec-ecmascript-language-types-string-type"></emu-xref>). The goal symbol for the parse is |Pattern[+U]|. Throw a *SyntaxError* exception if _P_ did not conform to the grammar, if any elements of _P_ were not matched by the parse, or if any Early Error conditions exist.
+      1. Let _patternCharacters_ be a List whose elements are the code points resulting from applying UTF-16 decoding to _P_'s sequence of elements.
+    1. Set _obj_.[[OriginalSource]] to _P_.
+    1. Set _obj_.[[OriginalFlags]] to _F_.
+    1. Set _obj_.[[RegExpMatcher]] to the internal procedure that evaluates the above parse of _P_ by applying the semantics provided in <emu-xref href="#sec-pattern-semantics"></emu-xref> using _patternCharacters_ as the pattern's List of |SourceCharacter| values and _F_ as the flag parameters.
+    1. Perform ? Set(_obj_, `"lastIndex"`, 0, *true*).
+    1. Return _obj_.
+  </emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The section <a href="https://tc39.github.io/ecma262/#sec-notation">21.2.2.1 Notation</a> is modified as follows.</p>
+
+<emu-clause id="sec-notation">
+  <h1>Notation</h1>
+  <p>The descriptions below use the following variables:</p>
+  <ul>
+    <li>
+      _Input_ is a List consisting of all of the characters, in order, of the String being matched by the regular expression pattern. Each character is either a code unit or a code point, depending upon the kind of pattern involved. The notation _Input_[_n_] means the _n_<sup>th</sup> character of _Input_, where _n_ can range between 0 (inclusive) and _InputLength_ (exclusive).
+    </li>
+    <li>
+      _InputLength_ is the number of characters in _Input_.
+    </li>
+    <li>
+      _NcapturingParens_ is the total number of left capturing parentheses (i.e. the total number of times the <emu-grammar>Atom :: `(` Disjunction `)`</emu-grammar> production is expanded) in the pattern. A left capturing parenthesis is any `(` pattern character that is matched by the `(` terminal of the <emu-grammar>Atom :: `(` Disjunction `)`</emu-grammar> production.
+    </li>
+    <li>
+      _IgnoreCase_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"i"` and otherwise is *false*.
+    </li>
+    <li>
+      _Multiline_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"m"` and otherwise is *false*.
+    </li>
+    <li>
+      <ins>_Singleline_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"s"` and otherwise is *false*.</ins>
+    </li>
+      _Unicode_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"u"` and otherwise is *false*.
+    </li>
+  </ul>
+</emu-clause>
+
+<hr>
+
+<p>The algorithm listed in <a href="https://tc39.github.io/ecma262/#sec-atom">21.2.2.8 Atom</a> is modified as follows.</p>
+
+<emu-clause id="sec-atom">
+  <h1>Atom</h1>
+  <p>The production <emu-grammar>Atom :: `.`</emu-grammar> evaluates as follows:</p>
+  <emu-alg>
+    1. <del>Let _A_ be the set of all characters except |LineTerminator|.</del>
+    1. <ins>If _Singleline_ is *true*, then</ins>
+      1. <ins>Let _A_ be the set of all characters.</ins>
+      1. <ins>Else, let _A_ be the set of all characters except |LineTerminator|.</ins>
+    1. Call CharacterSetMatcher(_A_, *false*) and return its Matcher result.
+  </emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The algorithm listed in <a href="https://tc39.github.io/ecma262/#sec-get-regexp.prototype.flags" title="get RegExp.prototype.flags">21.2.5.3</a> is modified as follows.</p>
+
+<emu-clause id="sec-get-regexp.prototype.flags">
+  <h1>get RegExp.prototype.flags</h1>
+  <p>`RegExp.prototype.flags` is an accessor property whose set accessor function is *undefined*. Its get accessor function performs the following steps:</p>
+  <emu-alg>
+    1. Let _R_ be the *this* value.
+    1. If Type(_R_) is not Object, throw a *TypeError* exception.
+    1. Let _result_ be the empty String.
+    1. Let _global_ be ToBoolean(? Get(_R_, `"global"`)).
+    1. If _global_ is *true*, append `"g"` as the last code unit of _result_.
+    1. Let _ignoreCase_ be ToBoolean(? Get(_R_, `"ignoreCase"`)).
+    1. If _ignoreCase_ is *true*, append `"i"` as the last code unit of _result_.
+    1. Let _multiline_ be ToBoolean(? Get(_R_, `"multiline"`)).
+    1. If _multiline_ is *true*, append `"m"` as the last code unit of _result_.
+    1. <ins>Let _singleline_ be ToBoolean(? Get(_R_, `"singleline"`)).</ins>
+    1. <ins>If _singleline_ is *true*, append `"s"` as the last code unit of _result_.</ins>
+    1. Let _unicode_ be ToBoolean(? Get(_R_, `"unicode"`)).
+    1. If _unicode_ is *true*, append `"u"` as the last code unit of _result_.
+    1. Let _sticky_ be ToBoolean(? Get(_R_, `"sticky"`)).
+    1. If _sticky_ is *true*, append `"y"` as the last code unit of _result_.
+    1. Return _result_.
+  </emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The following new section is added before <a href="https://tc39.github.io/ecma262/#sec-get-regexp.prototype.source">21.2.5.10 get RegExp.prototype.source</a>.</p>
+
+<emu-clause id="sec-get-regexp.prototype.singleline">
+  <h1>get RegExp.prototype.singleline</h1>
+  <p>`RegExp.prototype.singleline` is an accessor property whose set accessor function is *undefined*. Its get accessor function performs the following steps:</p>
+  <emu-alg>
+    1. Let _R_ be the *this* value.
+    1. If Type(_R_) is not Object, throw a *TypeError* exception.
+    1. If _R_ does not have an [[OriginalFlags]] internal slot, then
+      1. If SameValue(_R_, %RegExpPrototype%) is *true*, return *undefined*.
+      1. Otherwise, throw a *TypeError* exception.
+    1. Let _flags_ be _R_.[[OriginalFlags]].
+    1. If _flags_ contains the code unit `"s"`, return *true*.
+    1. Return *false*.
+  </emu-alg>
+</emu-clause>
