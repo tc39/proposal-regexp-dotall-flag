@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <pre class="metadata">
-title: Singleline flag for regular expressions
+title: s/dotAll flag for regular expressions
 status: proposal
 stage: 0
-location: https://mathiasbynens.github.io/es-regexp-singleline-flag/
+location: https://mathiasbynens.github.io/es-regexp-dotall-flag/
 copyright: false
 contributors: Mathias Bynens
 </pre>
@@ -63,13 +63,14 @@ contributors: Mathias Bynens
       _NcapturingParens_ is the total number of left capturing parentheses (i.e. the total number of times the <emu-grammar>Atom :: `(` Disjunction `)`</emu-grammar> production is expanded) in the pattern. A left capturing parenthesis is any `(` pattern character that is matched by the `(` terminal of the <emu-grammar>Atom :: `(` Disjunction `)`</emu-grammar> production.
     </li>
     <li>
+      <ins>_DotAll_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"s"` and otherwise is *false*.</ins>
+    </li>
+    <li>
       _IgnoreCase_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"i"` and otherwise is *false*.
     </li>
     <li>
       _Multiline_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"m"` and otherwise is *false*.
     </li>
-    <li>
-      <ins>_Singleline_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"s"` and otherwise is *false*.</ins>
     </li>
       _Unicode_ is *true* if the RegExp object's [[OriginalFlags]] internal slot contains `"u"` and otherwise is *false*.
     </li>
@@ -85,7 +86,7 @@ contributors: Mathias Bynens
   <p>The production <emu-grammar>Atom :: `.`</emu-grammar> evaluates as follows:</p>
   <emu-alg>
     1. <del>Let _A_ be the set of all characters except |LineTerminator|.</del>
-    1. <ins>If _Singleline_ is *true*, then</ins>
+    1. <ins>If _DotAll_ is *true*, then</ins>
       1. <ins>Let _A_ be the set of all characters.</ins>
       1. <ins>Else, let _A_ be the set of all characters except |LineTerminator|.</ins>
     1. Call CharacterSetMatcher(_A_, *false*) and return its Matcher result.
@@ -109,8 +110,8 @@ contributors: Mathias Bynens
     1. If _ignoreCase_ is *true*, append `"i"` as the last code unit of _result_.
     1. Let _multiline_ be ToBoolean(? Get(_R_, `"multiline"`)).
     1. If _multiline_ is *true*, append `"m"` as the last code unit of _result_.
-    1. <ins>Let _singleline_ be ToBoolean(? Get(_R_, `"singleline"`)).</ins>
-    1. <ins>If _singleline_ is *true*, append `"s"` as the last code unit of _result_.</ins>
+    1. <ins>Let _dotAll_ be ToBoolean(? Get(_R_, `"dotAll"`)).</ins>
+    1. <ins>If _dotAll_ is *true*, append `"s"` as the last code unit of _result_.</ins>
     1. Let _unicode_ be ToBoolean(? Get(_R_, `"unicode"`)).
     1. If _unicode_ is *true*, append `"u"` as the last code unit of _result_.
     1. Let _sticky_ be ToBoolean(? Get(_R_, `"sticky"`)).
@@ -123,9 +124,9 @@ contributors: Mathias Bynens
 
 <p>The following new section is added before <a href="https://tc39.github.io/ecma262/#sec-get-regexp.prototype.source">21.2.5.10 get RegExp.prototype.source</a>.</p>
 
-<emu-clause id="sec-get-regexp.prototype.singleline">
-  <h1>get RegExp.prototype.singleline</h1>
-  <p>`RegExp.prototype.singleline` is an accessor property whose set accessor function is *undefined*. Its get accessor function performs the following steps:</p>
+<emu-clause id="sec-get-regexp.prototype.dotAll">
+  <h1>get RegExp.prototype.dotAll</h1>
+  <p>`RegExp.prototype.dotAll` is an accessor property whose set accessor function is *undefined*. Its get accessor function performs the following steps:</p>
   <emu-alg>
     1. Let _R_ be the *this* value.
     1. If Type(_R_) is not Object, throw a *TypeError* exception.

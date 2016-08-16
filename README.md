@@ -1,4 +1,4 @@
-# ECMAScript proposal: `s` (`singleline`) flag for regular expressions
+# ECMAScript proposal: `s` (`dotAll`) flag for regular expressions
 
 ## Status
 
@@ -48,22 +48,22 @@ Instead, developers have to resort to cryptic workarounds like `[\s\S]` or `[^]`
 
 Since the need to match any character is quite common, other regular expression engines support a mode in which `.` matches any character, including line terminators.
 
-* Engines that support constants to enable regular expression flags implement `DOTALL` or `SINGLELINE` modifiers to opt-in to singleline mode.
+* Engines that support constants to enable regular expression flags implement `DOTALL` or `SINGLELINE`/`s` modifiers.
     * [Java](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#DOTALL) supports `Pattern.DOTALL`.
     * [C# and VB](https://msdn.microsoft.com/en-us/library/system.text.regularexpressions.regexoptions.aspx) support `RegexOptions.Singleline`.
     * Python supports both `re.DOTALL` and [`re.S`](https://docs.python.org/2/library/re.html#re.S).
-* Engines that support embedded flag expressions implement `(?s)` to opt-in to single-line mode.
+* Engines that support embedded flag expressions implement `(?s)`.
     * [Java](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#DOTALL)
     * [C# and VB](https://msdn.microsoft.com/en-us/library/yd1hzczs.aspx)
 * Engines that support regular expression flags implement the flag `s`.
     * [Perl](http://perldoc.perl.org/perlre.html#*s*)
     * [PHP](https://secure.php.net/manual/en/reference.pcre.pattern.modifiers.php#s)
 
-The most common naming pattern seems to be `singleline` & `s`.
+Note the established tradition of naming these modifiers `s` (short for `singleline`) and `dotAll`.
 
 ## Proposed solution
 
-We propose the addition of a new `s` flag (short for `singleline`) for ECMAScript regular expressions that makes `.` match any character, including line terminators.
+We propose the addition of a new `s` flag for ECMAScript regular expressions that makes `.` match any character, including line terminators.
 
 ```js
 /foo.bar/s.test('foo\nbar');
@@ -76,7 +76,7 @@ We propose the addition of a new `s` flag (short for `singleline`) for ECMAScrip
 const re = /foo.bar/s; // Or, `const re = new RegExp('foo.bar', 's');`.`
 re.test('foo\nbar');
 // → true
-re.singleline
+re.dotAll
 // → true
 re.flags
 // → 's'
@@ -88,17 +88,19 @@ re.flags
 
 The meaning of existing regular expression patterns isn’t affected by this proposal since the new `s` flag is required to opt-in to the new behavior.
 
-#### How does `singleline` mode affect `multiline` mode?
+#### How does `dotAll` mode affect `multiline` mode?
 
-Both modes are independent and can be combined. `multiline` mode only affects anchors, and `singleline` mode only affects `.`.
+Both modes are independent and can be combined. `multiline` mode only affects anchors, and `dotAll` mode only affects `.`.
 
-When both the `s` (`singleline`) and `m` (`multiline`) flags are set, `.` matches any character while still allowing `^` and `$` to match, respectively, just after and just before line terminators within the string.
+When both the `s` (`dotAll`) and `m` (`multiline`) flags are set, `.` matches any character while still allowing `^` and `$` to match, respectively, just after and just before line terminators within the string.
+
+This question might come up since the `s` flag stands for `singleline`, which seems to contradict `m` / `multiline` — except it doesn’t. This is a bit unfortunate, but we’re just following the established naming tradition in other regular expression engines. Picking any other flag name would only cause more confusion. The accessor name `dotAll` gives a much better description of the flag’s effect. For this reason, we recommend referring to this mode as _`dotAll` mode_ rather than _`singleline` mode_.
 
 ## Specification
 
-* [Ecmarkup source](https://github.com/mathiasbynens/es-regexp-singleline-flag/blob/master/spec.html)
-* [HTML version](https://mathiasbynens.github.io/es-regexp-singleline-flag/)
+* [Ecmarkup source](https://github.com/mathiasbynens/es-regexp-dotall-flag/blob/master/spec.html)
+* [HTML version](https://mathiasbynens.github.io/es-regexp-dotall-flag/)
 
 ## Implementations
 
-* [regexpu (transpiler)](https://github.com/mathiasbynens/regexpu) with the `{ singlelineFlag: true }` option enabled
+* [regexpu (transpiler)](https://github.com/mathiasbynens/regexpu) with the `{ dotAllFlag: true }` option enabled
