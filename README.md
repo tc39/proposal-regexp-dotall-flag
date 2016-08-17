@@ -104,3 +104,4 @@ This question might come up since the `s` flag stands for `singleline`, which se
 ## Implementations
 
 * [regexpu (transpiler)](https://github.com/mathiasbynens/regexpu) with the `{ dotAllFlag: true }` option enabled
+    * [online demo](https://mothereff.in/regexpu#input=const+regex+%3D+/foo.bar/s%3B%0Aconsole.log%28%0A++regex.test%28%27foo%5Cnbar%27%29%0A%29%3B%0A//+%E2%86%92+true&dotAllFlag=1)
