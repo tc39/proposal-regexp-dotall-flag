@@ -90,11 +90,11 @@ The meaning of existing regular expression patterns isn’t affected by this pro
 
 #### How does `dotAll` mode affect `multiline` mode?
 
+This question might come up since the `s` flag stands for `singleline`, which seems to contradict `m` / `multiline` — except it doesn’t. This is a bit unfortunate, but we’re just following the established naming tradition in other regular expression engines. Picking any other flag name would only cause more confusion. The accessor name `dotAll` gives a much better description of the flag’s effect. For this reason, we recommend referring to this mode as _`dotAll` mode_ rather than _`singleline` mode_.
+
 Both modes are independent and can be combined. `multiline` mode only affects anchors, and `dotAll` mode only affects `.`.
 
 When both the `s` (`dotAll`) and `m` (`multiline`) flags are set, `.` matches any character while still allowing `^` and `$` to match, respectively, just after and just before line terminators within the string.
-
-This question might come up since the `s` flag stands for `singleline`, which seems to contradict `m` / `multiline` — except it doesn’t. This is a bit unfortunate, but we’re just following the established naming tradition in other regular expression engines. Picking any other flag name would only cause more confusion. The accessor name `dotAll` gives a much better description of the flag’s effect. For this reason, we recommend referring to this mode as _`dotAll` mode_ rather than _`singleline` mode_.
 
 ## Specification
 
