@@ -18,18 +18,17 @@ ECMAScript recognizes the following line terminator characters:
 * U+2028 LINE SEPARATOR
 * U+2029 PARAGRAPH SEPARATOR
 
-These are the same characters [matched by `\p{Line_Break=Mandatory_Break}`](https://github.com/mathiasbynens/es-regexp-unicode-property-escapes). However, there are more characters that, depending on the use case, [could be considered as newline characters](http://www.unicode.org/reports/tr14/):
+However, there are more characters that, depending on the use case, [could be considered as newline characters](http://www.unicode.org/reports/tr14/):
 
 * U+000B VERTICAL TAB (`\v`)
 * U+000C FORM FEED (`\f`)
-* U+0085 NEXT LINE (`\p{Line_Break=Next_Line}`)
+* U+0085 NEXT LINE
 
 This makes the current behavior of `.` problematic:
 
 * By design, it excludes _some_ newline characters, but not all of them, which often does not match the developer’s use case.
 * It’s commonly used to match _any_ character, which it doesn’t do.
 
-The former issue is addressed by the [proposal to add Unicode property escapes to regular expressions](https://github.com/mathiasbynens/es-regexp-unicode-property-escapes) (through `\p{Line_Break=…}`).
 The proposal you’re looking at right now addresses the latter issue.
 
 Developers wishing to truly match *any* character, including these line terminator characters, cannot use `.`:
