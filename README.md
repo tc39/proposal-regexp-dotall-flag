@@ -60,6 +60,8 @@ Since the need to match any character is quite common, other regular expression 
 
 Note the established tradition of naming these modifiers `s` (short for `singleline`) and `dotAll`.
 
+One exception is Ruby, where [the `m` flag (`Regexp::MULTILINE`)](https://ruby-doc.org/core-2.3.3/Regexp.html#method-i-options) also enables `dotAll` mode. Unfortunately, we cannot do the same thing for the `m` flag in JavaScript without breaking backwards compatibility.
+
 ## Proposed solution
 
 We propose the addition of a new `s` flag for ECMAScript regular expressions that makes `.` match any character, including line terminators.
