@@ -74,7 +74,7 @@ We propose the addition of a new `s` flag for ECMAScript regular expressions tha
 ## High-level API
 
 ```js
-const re = /foo.bar/s; // Or, `const re = new RegExp('foo.bar', 's');`.`
+const re = /foo.bar/s; // Or, `const re = new RegExp('foo.bar', 's');`.
 re.test('foo\nbar');
 // → true
 re.dotAll
