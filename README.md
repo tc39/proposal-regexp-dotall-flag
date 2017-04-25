@@ -99,8 +99,8 @@ When both the `s` (`dotAll`) and `m` (`multiline`) flags are set, `.` matches an
 
 ## Specification
 
-* [Ecmarkup source](https://github.com/mathiasbynens/es-regexp-dotall-flag/blob/master/spec.html)
-* [HTML version](https://mathiasbynens.github.io/es-regexp-dotall-flag/)
+* [Ecmarkup source](https://github.com/tc39/proposal-regexp-dotall-flag/blob/master/spec.html)
+* [HTML version](https://tc39.github.io/proposal-regexp-dotall-flag/)
 
 ## Implementations
 
