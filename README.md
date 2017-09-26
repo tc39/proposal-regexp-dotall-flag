@@ -104,10 +104,10 @@ When both the `s` (`dotAll`) and `m` (`multiline`) flags are set, `.` matches an
 
 ## Implementations
 
-* [V8](https://bugs.chromium.org/p/v8/issues/detail?id=6172)
+* [V8](https://bugs.chromium.org/p/v8/issues/detail?id=6172), shipping in Chrome 62
+* [JavaScriptCore](https://bugs.webkit.org/show_bug.cgi?id=172634), shipping in [Safari Technology Preview 39a](https://developer.apple.com/safari/technology-preview/release-notes/)
 * [regexpu (transpiler)](https://github.com/mathiasbynens/regexpu) with the `{ dotAllFlag: true }` option enabled
     * [online demo](https://mothereff.in/regexpu#input=const+regex+%3D+/foo.bar/s%3B%0Aconsole.log%28%0A++regex.test%28%27foo%5Cnbar%27%29%0A%29%3B%0A//+%E2%86%92+true&dotAllFlag=1)
     * [Babel plugin](https://github.com/mathiasbynens/babel-plugin-transform-dotall-regex)
 * [Compat-transpiler of RegExp Tree](https://github.com/dmitrysoshnikov/regexp-tree#using-compat-transpiler-api)
     * [Babel plugin](https://github.com/dmitrysoshnikov/babel-plugin-transform-modern-regexp)
-* [Safari]((https://developer.apple.com/safari/technology-preview/release-notes/) beginning in Safari Technology Preview 39a
