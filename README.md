@@ -2,7 +2,7 @@
 
 ## Status
 
-This proposal is in stage 3 of [the TC39 process](https://tc39.github.io/process-document/).
+This proposal is at stage 4 of [the TC39 process](https://tc39.github.io/process-document/).
 
 ## Motivation
 
@@ -18,7 +18,7 @@ ECMAScript recognizes the following line terminator characters:
 * U+2028 LINE SEPARATOR
 * U+2029 PARAGRAPH SEPARATOR
 
-However, there are more characters that, depending on the use case, [could be considered as newline characters](http://www.unicode.org/reports/tr14/):
+However, there are more characters that, depending on the use case, [could be considered as newline characters](https://www.unicode.org/reports/tr14/):
 
 * U+000B VERTICAL TAB (`\v`)
 * U+000C FORM FEED (`\f`)
@@ -53,9 +53,9 @@ Since the need to match any character is quite common, other regular expression 
     * Python supports both `re.DOTALL` and [`re.S`](https://docs.python.org/2/library/re.html#re.S).
 * Engines that support embedded flag expressions implement `(?s)`.
     * [Java](https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#DOTALL)
-    * [C# and VB](https://msdn.microsoft.com/en-us/library/yd1hzczs.aspx)
+    * [C# and VB](https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-options)
 * Engines that support regular expression flags implement the flag `s`.
-    * [Perl](http://perldoc.perl.org/perlre.html#*s*)
+    * [Perl](https://perldoc.perl.org/perlre.html#*s*)
     * [PHP](https://secure.php.net/manual/en/reference.pcre.pattern.modifiers.php#s)
 
 Note the established tradition of naming these modifiers `s` (short for `singleline`) and `dotAll`.
