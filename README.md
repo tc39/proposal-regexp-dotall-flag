@@ -111,3 +111,4 @@ When both the `s` (`dotAll`) and `m` (`multiline`) flags are set, `.` matches an
     * [Babel plugin](https://github.com/mathiasbynens/babel-plugin-transform-dotall-regex)
 * [Compat-transpiler of RegExp Tree](https://github.com/dmitrysoshnikov/regexp-tree#using-compat-transpiler-api)
     * [Babel plugin](https://github.com/dmitrysoshnikov/babel-plugin-transform-modern-regexp)
+* [XS](https://github.com/Moddable-OpenSource/moddable/blob/public/xs/sources/xsre.c), in [January 17, 2018 update](http://blog.moddable.tech/blog/january-17-2017-big-update-to-moddable-sdk/)()
