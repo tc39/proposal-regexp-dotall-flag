@@ -1,0 +1,102 @@
+<!doctype html>
+<head><meta charset="utf-8">
+<title>s/dotAll flag for regular expressions</title><script type="application/json" id="menu-search-biblio">[{"type":"op","aoid":"RegExpInitialize","refId":"sec-regexpinitialize","location":"","referencingIds":[],"key":"RegExpInitialize"},{"type":"clause","id":"sec-regexpinitialize","aoid":"RegExpInitialize","title":"Runtime Semantics: RegExpInitialize ( obj, pattern, flags )","titleHTML":"Runtime Semantics: RegExpInitialize ( <var>obj</var>, <var>pattern</var>, <var>flags</var> )","number":"1","namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","referencingIds":[],"key":"Runtime Semantics: RegExpInitialize ( obj, pattern, flags )"},{"type":"production","id":"prod-Atom","name":"Atom","referencingIds":[],"namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","key":"Atom"},{"type":"clause","id":"sec-notation","aoid":null,"title":"Notation","titleHTML":"Notation","number":"2","namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","referencingIds":[],"key":"Notation"},{"type":"clause","id":"sec-atom","aoid":null,"title":"Atom","titleHTML":"Atom","number":"3","namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","referencingIds":[],"key":"Atom"},{"type":"clause","id":"sec-get-regexp.prototype.flags","aoid":null,"title":"get RegExp.prototype.flags","titleHTML":"get RegExp.prototype.flags","number":"4","namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","referencingIds":[],"key":"get RegExp.prototype.flags"},{"type":"clause","id":"sec-get-regexp.prototype.dotAll","aoid":null,"title":"get RegExp.prototype.dotAll","titleHTML":"get RegExp.prototype.dotAll","number":"5","namespace":"https://tc39.github.io/proposal-regexp-dotall-flag/","location":"","referencingIds":[],"key":"get RegExp.prototype.dotAll"}]</script></head><body><div id="menu-toggle">☰</div><div id="menu-spacer"></div><div id="menu"><div id="menu-search"><input type="text" id="menu-search-box" placeholder="Search..."><div id="menu-search-results" class="inactive"></div></div><div id="menu-pins"><div class="menu-pane-header">Pins</div><ul id="menu-pins-list"></ul></div><div class="menu-pane-header">Table of Contents</div><div id="menu-toc"><ol class="toc"><li><span class="item-toggle-none"></span><a href="#sec-regexpinitialize" title="Runtime Semantics: RegExpInitialize ( obj, pattern, flags )"><span class="secnum">1</span> RS: RegExpInitialize ( <var>obj</var>, <var>pattern</var>, <var>flags</var> )</a></li><li><span class="item-toggle-none"></span><a href="#sec-notation" title="Notation"><span class="secnum">2</span> Notation</a></li><li><span class="item-toggle-none"></span><a href="#sec-atom" title="Atom"><span class="secnum">3</span> Atom</a></li><li><span class="item-toggle-none"></span><a href="#sec-get-regexp.prototype.flags" title="get RegExp.prototype.flags"><span class="secnum">4</span> get RegExp.prototype.flags</a></li><li><span class="item-toggle-none"></span><a href="#sec-get-regexp.prototype.dotAll" title="get RegExp.prototype.dotAll"><span class="secnum">5</span> get RegExp.prototype.dotAll</a></li></ol></div></div><div id="spec-container"><h1 class="version first">Stage 4 Draft / January 19, 2018</h1><h1 class="title">s/dotAll flag for regular expressions</h1>
+<script src="ecmarkup.js" defer=""></script>
+<link rel="stylesheet" href="ecmarkup.css">
+<style>
+  hr {
+    height: 0.25em;
+    background: #ccc;
+    border: 0;
+    margin: 2em 0;
+  }
+
+</style>
+
+<p>The algorithm listed in  <a href="https://tc39.github.io/ecma262/#sec-regexpinitialize" title="Runtime Semantics: RegExpInitialize ( obj, pattern, flags )">21.2.3.2.2</a> is modified as follows.</p>
+
+<emu-clause id="sec-regexpinitialize" aoid="RegExpInitialize">
+  <h1><span class="secnum">1</span>Runtime Semantics: RegExpInitialize ( <var>obj</var>, <var>pattern</var>, <var>flags</var> )</h1>
+  <p>When the abstract operation RegExpInitialize with arguments <var>obj</var>, <var>pattern</var>, and <var>flags</var> is called, the following steps are taken:</p>
+  <emu-alg><ol><li>If <var>pattern</var> is <emu-val>undefined</emu-val>, let <var>P</var> be the empty String.</li><li>Else, let <var>P</var> be ?&nbsp;<emu-xref aoid="ToString" id="_ref_0"><a href="https://tc39.github.io/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>pattern</var>).</li><li>If <var>flags</var> is <emu-val>undefined</emu-val>, let <var>F</var> be the empty String.</li><li>Else, let <var>F</var> be ?&nbsp;<emu-xref aoid="ToString" id="_ref_1"><a href="https://tc39.github.io/ecma262/#sec-tostring">ToString</a></emu-xref>(<var>flags</var>).</li><li>If <var>F</var> contains any code unit other than <code>"g"</code>, <code>"i"</code>, <code>"m"</code>, <ins><code>"s"</code>, </ins><code>"u"</code>, or <code>"y"</code> or if it contains the same code unit more than once, throw a <emu-val>SyntaxError</emu-val> exception.</li><li>If <var>F</var> contains <code>"u"</code>, let <var>BMP</var> be <emu-val>false</emu-val>; else let <var>BMP</var> be <emu-val>true</emu-val>.</li><li>If <var>BMP</var> is <emu-val>true</emu-val>, then<ol><li>Parse <var>P</var> using the grammars in <emu-xref href="#sec-patterns"><a href="https://tc39.github.io/ecma262/#sec-patterns">21.2.1</a></emu-xref> and interpreting each of its 16-bit elements as a Unicode BMP code point. UTF-16 decoding is not applied to the elements. The <emu-xref href="#sec-context-free-grammars"><a href="https://tc39.github.io/ecma262/#sec-context-free-grammars">goal symbol</a></emu-xref> for the parse is <emu-nt params="~U"><a href="https://tc39.github.io/ecma262/#prod-Pattern">Pattern</a><emu-mods><emu-params>[~U]</emu-params></emu-mods></emu-nt>. Throw a <emu-val>SyntaxError</emu-val> exception if <var>P</var> did not conform to the grammar, if any elements of <var>P</var> were not matched by the parse, or if any Early Error conditions exist.</li><li>Let <var>patternCharacters</var> be a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.github.io/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> whose elements are the code unit elements of <var>P</var>.</li></ol></li><li>Else,<ol><li>Parse <var>P</var> using the grammars in <emu-xref href="#sec-patterns"><a href="https://tc39.github.io/ecma262/#sec-patterns">21.2.1</a></emu-xref> and interpreting <var>P</var> as UTF-16 encoded Unicode code points (<emu-xref href="#sec-ecmascript-language-types-string-type"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-language-types-string-type">6.1.4</a></emu-xref>). The <emu-xref href="#sec-context-free-grammars"><a href="https://tc39.github.io/ecma262/#sec-context-free-grammars">goal symbol</a></emu-xref> for the parse is <emu-nt params="+U"><a href="https://tc39.github.io/ecma262/#prod-Pattern">Pattern</a><emu-mods><emu-params>[+U]</emu-params></emu-mods></emu-nt>. Throw a <emu-val>SyntaxError</emu-val> exception if <var>P</var> did not conform to the grammar, if any elements of <var>P</var> were not matched by the parse, or if any Early Error conditions exist.</li><li>Let <var>patternCharacters</var> be a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.github.io/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> whose elements are the code points resulting from applying UTF-16 decoding to <var>P</var>'s sequence of elements.</li></ol></li><li>Set <var>obj</var>.[[OriginalSource]] to <var>P</var>.</li><li>Set <var>obj</var>.[[OriginalFlags]] to <var>F</var>.</li><li>Set <var>obj</var>.[[RegExpMatcher]] to the internal procedure that evaluates the above parse of <var>P</var> by applying the semantics provided in <emu-xref href="#sec-pattern-semantics"><a href="https://tc39.github.io/ecma262/#sec-pattern-semantics">21.2.2</a></emu-xref> using <var>patternCharacters</var> as the pattern's <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.github.io/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> of <emu-nt><a href="https://tc39.github.io/ecma262/#prod-SourceCharacter">SourceCharacter</a></emu-nt> values and <var>F</var> as the flag parameters.</li><li>Perform ?&nbsp;<emu-xref aoid="Set" id="_ref_2"><a href="https://tc39.github.io/ecma262/#sec-set-o-p-v-throw">Set</a></emu-xref>(<var>obj</var>, <code>"lastIndex"</code>, 0, <emu-val>true</emu-val>).</li><li>Return <var>obj</var>.
+  </li></ol></emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The section  <a href="https://tc39.github.io/ecma262/#sec-notation">21.2.2.1 Notation</a> is modified as follows.</p>
+
+<emu-clause id="sec-notation">
+  <h1><span class="secnum">2</span>Notation</h1>
+  <p>The descriptions below use the following variables:</p>
+  <ul>
+    <li>
+      <var>Input</var> is a <emu-xref href="#sec-list-and-record-specification-type"><a href="https://tc39.github.io/ecma262/#sec-list-and-record-specification-type">List</a></emu-xref> consisting of all of the characters, in order, of the String being matched by the regular expression pattern. Each character is either a code unit or a code point, depending upon the kind of pattern involved. The notation <var>Input</var>[<var>n</var>] means the <var>n</var><sup>th</sup> character of <var>Input</var>, where <var>n</var> can range between 0 (inclusive) and <var>InputLength</var> (exclusive).
+    
+    </li>
+    <li>
+      <var>InputLength</var> is the number of characters in <var>Input</var>.
+    
+    </li>
+    <li>
+      <var>NcapturingParens</var> is the total number of left capturing parentheses (i.e. the total number of times the  <emu-grammar><emu-production name="Atom" type="lexical" collapsed="" id="prod-Atom" class=" inline">
+    <emu-nt><a href="#prod-Atom">Atom</a></emu-nt><emu-geq>::</emu-geq><emu-rhs a="34eb148f"><emu-t>(</emu-t><emu-nt><a href="https://tc39.github.io/ecma262/#prod-Disjunction">Disjunction</a></emu-nt><emu-t>)</emu-t></emu-rhs>
+</emu-production></emu-grammar> production is expanded) in the pattern. A left capturing parenthesis is any <code>(</code> pattern character that is matched by the <code>(</code> terminal of the  <emu-grammar><emu-production name="Atom" type="lexical" collapsed="" class=" inline">
+    <emu-nt><a href="#prod-Atom">Atom</a></emu-nt><emu-geq>::</emu-geq><emu-rhs a="34eb148f"><emu-t>(</emu-t><emu-nt><a href="https://tc39.github.io/ecma262/#prod-Disjunction">Disjunction</a></emu-nt><emu-t>)</emu-t></emu-rhs>
+</emu-production></emu-grammar> production.
+    
+    </li>
+    <li>
+      <ins><var>DotAll</var> is <emu-val>true</emu-val> if the RegExp object's [[OriginalFlags]] internal slot contains <code>"s"</code> and otherwise is <emu-val>false</emu-val>.</ins>
+    </li>
+    <li>
+      <var>IgnoreCase</var> is <emu-val>true</emu-val> if the RegExp object's [[OriginalFlags]] internal slot contains <code>"i"</code> and otherwise is <emu-val>false</emu-val>.
+    
+    </li>
+    <li>
+      <var>Multiline</var> is <emu-val>true</emu-val> if the RegExp object's [[OriginalFlags]] internal slot contains <code>"m"</code> and otherwise is <emu-val>false</emu-val>.
+    
+    </li>
+    
+      <var>Unicode</var> is <emu-val>true</emu-val> if the RegExp object's [[OriginalFlags]] internal slot contains <code>"u"</code> and otherwise is <emu-val>false</emu-val>.
+    
+  
+    
+  </ul>
+</emu-clause>
+
+<hr>
+
+<p>The algorithm listed in  <a href="https://tc39.github.io/ecma262/#sec-atom">21.2.2.8 Atom</a> is modified as follows.</p>
+
+<emu-clause id="sec-atom">
+  <h1><span class="secnum">3</span>Atom</h1>
+  <p>The production  <emu-grammar><emu-production name="Atom" type="lexical" collapsed="" class=" inline">
+    <emu-nt><a href="#prod-Atom">Atom</a></emu-nt><emu-geq>::</emu-geq><emu-rhs a="9658e473"><emu-t>.</emu-t></emu-rhs>
+</emu-production></emu-grammar> evaluates as follows:</p>
+  <emu-alg><ol><li><del>Let <var>A</var> be the set of all characters except <emu-nt><a href="https://tc39.github.io/ecma262/#prod-LineTerminator">LineTerminator</a></emu-nt>.</del></li><li><ins>If <var>DotAll</var> is <emu-val>true</emu-val>, then</ins><ol><li><ins>Let <var>A</var> be the set of all characters.</ins></li></ol></li><li><ins>Otherwise, let <var>A</var> be the set of all characters except <emu-nt><a href="https://tc39.github.io/ecma262/#prod-LineTerminator">LineTerminator</a></emu-nt>.</ins></li><li>Call <emu-xref aoid="CharacterSetMatcher" id="_ref_3"><a href="https://tc39.github.io/ecma262/#sec-runtime-semantics-charactersetmatcher-abstract-operation">CharacterSetMatcher</a></emu-xref>(<var>A</var>, <emu-val>false</emu-val>) and return its Matcher result.
+  </li></ol></emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The algorithm listed in  <a href="https://tc39.github.io/ecma262/#sec-get-regexp.prototype.flags" title="get RegExp.prototype.flags">21.2.5.3</a> is modified as follows.</p>
+
+<emu-clause id="sec-get-regexp.prototype.flags">
+  <h1><span class="secnum">4</span>get RegExp.prototype.flags</h1>
+  <p><code>RegExp.prototype.flags</code> is an accessor property whose set accessor function is <emu-val>undefined</emu-val>. Its get accessor function performs the following steps:</p>
+  <emu-alg><ol><li>Let <var>R</var> be the <emu-val>this</emu-val> value.</li><li>If <emu-xref aoid="Type" id="_ref_4"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>R</var>) is not Object, throw a <emu-val>TypeError</emu-val> exception.</li><li>Let <var>result</var> be the empty String.</li><li>Let <var>global</var> be <emu-xref aoid="ToBoolean" id="_ref_5"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_6"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"global"</code>)).</li><li>If <var>global</var> is <emu-val>true</emu-val>, append <code>"g"</code> as the last code unit of <var>result</var>.</li><li>Let <var>ignoreCase</var> be <emu-xref aoid="ToBoolean" id="_ref_7"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_8"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"ignoreCase"</code>)).</li><li>If <var>ignoreCase</var> is <emu-val>true</emu-val>, append <code>"i"</code> as the last code unit of <var>result</var>.</li><li>Let <var>multiline</var> be <emu-xref aoid="ToBoolean" id="_ref_9"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_10"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"multiline"</code>)).</li><li>If <var>multiline</var> is <emu-val>true</emu-val>, append <code>"m"</code> as the last code unit of <var>result</var>.</li><li><ins>Let <var>dotAll</var> be <emu-xref aoid="ToBoolean" id="_ref_11"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_12"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"dotAll"</code>)).</ins></li><li><ins>If <var>dotAll</var> is <emu-val>true</emu-val>, append <code>"s"</code> as the last code unit of <var>result</var>.</ins></li><li>Let <var>unicode</var> be <emu-xref aoid="ToBoolean" id="_ref_13"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_14"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"unicode"</code>)).</li><li>If <var>unicode</var> is <emu-val>true</emu-val>, append <code>"u"</code> as the last code unit of <var>result</var>.</li><li>Let <var>sticky</var> be <emu-xref aoid="ToBoolean" id="_ref_15"><a href="https://tc39.github.io/ecma262/#sec-toboolean">ToBoolean</a></emu-xref>(? <emu-xref aoid="Get" id="_ref_16"><a href="https://tc39.github.io/ecma262/#sec-get-o-p">Get</a></emu-xref>(<var>R</var>, <code>"sticky"</code>)).</li><li>If <var>sticky</var> is <emu-val>true</emu-val>, append <code>"y"</code> as the last code unit of <var>result</var>.</li><li>Return <var>result</var>.
+  </li></ol></emu-alg>
+</emu-clause>
+
+<hr>
+
+<p>The following new section is added before  <a href="https://tc39.github.io/ecma262/#sec-get-regexp.prototype.source">21.2.5.10 get RegExp.prototype.source</a>.</p>
+
+<emu-clause id="sec-get-regexp.prototype.dotAll">
+  <h1><span class="secnum">5</span>get RegExp.prototype.dotAll</h1>
+  <p><code>RegExp.prototype.dotAll</code> is an accessor property whose set accessor function is <emu-val>undefined</emu-val>. Its get accessor function performs the following steps:</p>
+  <emu-alg><ol><li>Let <var>R</var> be the <emu-val>this</emu-val> value.</li><li>If <emu-xref aoid="Type" id="_ref_17"><a href="https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values">Type</a></emu-xref>(<var>R</var>) is not Object, throw a <emu-val>TypeError</emu-val> exception.</li><li>If <var>R</var> does not have an [[OriginalFlags]] internal slot, then<ol><li>If <emu-xref aoid="SameValue" id="_ref_18"><a href="https://tc39.github.io/ecma262/#sec-samevalue">SameValue</a></emu-xref>(<var>R</var>, <emu-xref href="#sec-properties-of-the-regexp-prototype-object"><a href="https://tc39.github.io/ecma262/#sec-properties-of-the-regexp-prototype-object">%RegExpPrototype%</a></emu-xref>) is <emu-val>true</emu-val>, return <emu-val>undefined</emu-val>.</li><li>Otherwise, throw a <emu-val>TypeError</emu-val> exception.</li></ol></li><li>Let <var>flags</var> be <var>R</var>.[[OriginalFlags]].</li><li>If <var>flags</var> contains the code unit <code>"s"</code>, return <emu-val>true</emu-val>.</li><li>Return <emu-val>false</emu-val>.
+  </li></ol></emu-alg>
+</emu-clause>
+</div></body>
