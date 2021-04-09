@@ -1,5 +1,7 @@
 # ECMAScript proposal: `s` (`dotAll`) flag for regular expressions
 
+![Stage 4](https://badges.aleen42.com/src/tc39_5.svg)
+
 ## Status
 
 This proposal is at stage 4 of [the TC39 process](https://tc39.github.io/process-document/).
